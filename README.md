@@ -1,5 +1,6 @@
 # 🌿 kube-green Automation with Kestra
 
+This is project is created for [Kestra Hackweek by WeMakeDevs](https://www.wemakedevs.org/)
 Automate `kube-green` sleep schedules in Kubernetes using [Kestra](https://kestra.io), with daily flows that apply `SleepInfo` CRDs and notify via Slack.
 
 ---
