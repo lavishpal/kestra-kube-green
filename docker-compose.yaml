@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  kestra:
+    image: kestra/kestra:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./flows:/app/flows
+      - kestra-data:/app/storage
+    environment:
+      - KESTRA_CONFIGURATION=k:
+        kestra:
+          server:
+            basic-auth:
+              enabled: true
+              users:
+                - username: admin
+                  password: admin
+          repository:
+            type: memory
+          queue:
+            type: memory
+
+volumes:
+  kestra-data:

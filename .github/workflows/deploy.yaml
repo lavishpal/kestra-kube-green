@@ -1,0 +1,32 @@
+name: Deploy Kestra Flow
+
+on:
+  push:
+    paths:
+      - 'flows/**.yaml'
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Kestra CLI
+        run: |
+          curl -sL https://kestra.io/install.sh | bash
+          echo "$(pwd)/.kestra/bin" >> $GITHUB_PATH
+
+      - name: Authenticate with Kestra
+        env:
+          KESTRA_API_URL: ${{ secrets.KESTRA_API_URL }}
+          KESTRA_API_USERNAME: ${{ secrets.KESTRA_API_USERNAME }}
+          KESTRA_API_PASSWORD: ${{ secrets.KESTRA_API_PASSWORD }}
+        run: |
+          kestra auth login --username $KESTRA_API_USERNAME --password $KESTRA_API_PASSWORD --url $KESTRA_API_URL
+
+      - name: Deploy Kestra Flow
+        run: |
+          kestra flow create flows/kube-green-scheduler.yaml

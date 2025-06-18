@@ -1,0 +1,81 @@
+id: kube-green-scheduler
+namespace: kube-green-manager
+
+tasks:
+  - id: fetch-schedule-config
+    type: io.kestra.plugin.fs.http.Http
+    url: https://example.com/schedules/sleepinfo.json
+    method: GET
+
+  - id: generate-sleepinfo-yaml
+    type: io.kestra.plugin.scripts.python.Script
+    inputFiles:
+      schedule.json: "{{ outputs.fetch-schedule-config.body }}"
+    script: |
+      import json
+
+      with open("schedule.json") as f:
+          config = json.load(f)
+
+      timezone = config.get("timeZone", "UTC")
+      weekdays = config.get("weekdays", "1-5")
+      sleepAt = config.get("sleepAt", "20:00")
+      wakeUpAt = config.get("wakeUpAt", "08:00")
+      suspendCron = config.get("suspendCronJobs", True)
+
+      exclude = config.get("excludeRef", [])
+      exclude_lines = "\n".join([
+          f"    - apiVersion: \"{e['apiVersion']}\"\n      kind: {e['kind']}\n      name: {e['name']}" for e in exclude
+      ])
+
+      content = f"""apiVersion: kube-green.com/v1alpha1
+kind: SleepInfo
+metadata:
+  name: working-hours
+spec:
+  weekdays: \"{weekdays}\"
+  sleepAt: \"{sleepAt}\"
+  wakeUpAt: \"{wakeUpAt}\"
+  timeZone: \"{timezone}\"
+  suspendCronJobs: {str(suspendCron).lower()}
+"""
+
+      if exclude_lines:
+          content += f"  excludeRef:\n{exclude_lines}\n"
+
+      with open("sleepinfo.yaml", "w") as out:
+          out.write(content)
+
+  - id: apply-kubegreen-sleepinfo
+    type: io.kestra.plugin.scripts.bash.Bash
+    inputFiles:
+      sleepinfo.yaml: "{{ outputs.generate-sleepinfo-yaml.files.sleepinfo.yaml }}"
+    script: |
+      echo "Applying SleepInfo CRD to Kubernetes..."
+      kubectl apply -f sleepinfo.yaml -n staging
+
+  - id: notify-slack
+    type: io.kestra.plugin.notifications.slack.SlackIncomingWebhook
+    url: "{{ secrets.SLACK_WEBHOOK_URL }}"
+    payload:
+      text: "🌿 kube-green SleepInfo applied to *staging* namespace with updated schedule from external config."
+
+triggers:
+  - type: io.kestra.plugin.core.schedule.Schedule
+    cron: "0 8 * * *" # Runs every day at 8:00 AM UTC
+
+# Secrets required:
+# - SLACK_WEBHOOK_URL: Slack incoming webhook URL
+# - KUBECONFIG environment set in agent or use cluster service account
+
+# Optional external JSON structure (sleepinfo.json):
+# {
+#   "timeZone": "Europe/Rome",
+#   "weekdays": "1-5",
+#   "sleepAt": "20:00",
+#   "wakeUpAt": "08:00",
+#   "suspendCronJobs": true,
+#   "excludeRef": [
+#     { "apiVersion": "apps/v1", "kind": "Deployment", "name": "my-deployment" }
+#   ]
+# }
