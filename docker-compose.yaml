@@ -6,20 +6,10 @@ services:
       - "8080:8080"
     volumes:
       - ./flows:/app/flows
+      - ./kestra.yml:/app/config.yml        # Mount custom config
       - kestra-data:/app/storage
     environment:
-      - KESTRA_CONFIGURATION=k:
-        kestra:
-          server:
-            basic-auth:
-              enabled: true
-              users:
-                - username: admin
-                  password: admin
-          repository:
-            type: memory
-          queue:
-            type: memory
+      - KESTRA_CONFIGURATION_FILE=/app/config.yml  # Point to it
 
 volumes:
   kestra-data:
