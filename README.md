@@ -25,7 +25,7 @@ Automate `kube-green` sleep schedules in Kubernetes using [Kestra](https://kestr
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/your-username/kestra-kube-green.git
+git clone https://github.com/lavishpal/kestra-kube-green.git
 cd kestra-kube-green
 ```
 
