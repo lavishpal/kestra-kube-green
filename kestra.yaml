@@ -1,0 +1,11 @@
+kestra:
+  server:
+    basic-auth:
+      enabled: true
+      users:
+        - username: admin
+          password: admin
+  repository:
+    type: memory
+  queue:
+    type: memory
