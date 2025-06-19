@@ -1,4 +1,4 @@
-# 🌿 kube-green Automation with Kestra
+# kube-green Automation with Kestra
 
 This is project is created for [Kestra Hackweek by WeMakeDevs](https://www.wemakedevs.org/)
 Automate `kube-green` sleep schedules in Kubernetes using [Kestra](https://kestra.io), with daily flows that apply `SleepInfo` CRDs and notify via Slack.
@@ -8,16 +8,19 @@ Automate `kube-green` sleep schedules in Kubernetes using [Kestra](https://kestr
 ## 📁 Project Structure
 ```
 .
-├── Dockerfile                     # Custom Kestra container (optional)
-├── docker-compose.yml             # Run Kestra locally
-├── README.md                      # You're here
-├── flows/
-│   └── kube-green-scheduler.yaml  # Main Kestra flow
+├── .github/
+│   └── workflows/
+│       └── deploy.yml             # GitHub Actions workflow to deploy the Kestra flow using the CLI
 ├── configs/
-│   └── sample-sleepinfo.json      # Example input config
-└── .github/
-    └── workflows/
-        └── deploy.yml             # CI to deploy flow via Kestra CLI
+│   └── sample-sleepinfo.json     # Example input configuration for the Kestra flow
+├── flows/
+│   └── kube-green-scheduler.yaml # Main Kestra flow definition to manage scaling
+├── docker-compose.yml            # Compose file to run Kestra locally
+├── Dockerfile                    # (Optional) Custom Kestra container image
+├── kestra.yaml                   # Kestra CLI or flow configuration file (assumed to exist)
+├── README.md                     # Project overview and usage instructions
+└── LICENSE                       # Open source license for the project
+
 ```
 
 ---
