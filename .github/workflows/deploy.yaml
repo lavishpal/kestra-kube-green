@@ -3,8 +3,6 @@ name: Deploy Kestra Flow
 
 on:
   push:
-    paths:
-      - 'flows/**.yaml'
     branches:
       - main
 
