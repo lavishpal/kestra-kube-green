@@ -20,8 +20,11 @@ jobs:
       - name : Permissions
         run: |
            chmod +x kestra 
+        run: |
            mkdir -p ~/.kestra/bin
+        run: |
            mv kestra ~/.kestra/bin/
+        run: |   
            echo "$HOME/.kestra/bin" >> $GITHUB_PATH   
 
       - name: Verify Kestra CLI Install
