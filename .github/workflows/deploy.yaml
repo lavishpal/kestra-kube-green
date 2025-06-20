@@ -1,3 +1,4 @@
+# This is the kestra fflow file
 name: Deploy Kestra Flow
 
 on:
@@ -17,7 +18,7 @@ jobs:
       - name : Download Kestra CLI
         run: |
            curl -L https://github.com/kestra-io/kestra/releases/latest/download/kestra-linux-amd64 -o kestra
-           chmod +x kestra
+           chmod +x kestra 
            mkdir -p ~/.kestra/bin
            mv kestra ~/.kestra/bin/
            echo "$HOME/.kestra/bin" >> $GITHUB_PATH   
