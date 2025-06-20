@@ -23,8 +23,8 @@ jobs:
 
       - name: Verify Kestra CLI Install
         run: |
-          ls -l .kestra/bin/
-          .kestra/bin/kestra version
+          ls -l ~/.kestra/bin/
+          ~/.kestra/bin/kestra version
 
       - name: Authenticate with Kestra
         env:
@@ -32,8 +32,8 @@ jobs:
           KESTRA_API_USERNAME: ${{ secrets.KESTRA_API_USERNAME }}
           KESTRA_API_PASSWORD: ${{ secrets.KESTRA_API_PASSWORD }}
         run: |
-          kestra auth login --username $KESTRA_API_USERNAME --password $KESTRA_API_PASSWORD --url $KESTRA_API_URL
+          ~/.kestra/bin/kestra auth login --username $KESTRA_API_USERNAME --password $KESTRA_API_PASSWORD --url $KESTRA_API_URL
 
       - name: Deploy Kestra Flow
         run: |
-          kestra flow create flows/kube-green-scheduler.yaml
+          ~/.kestra/bin/kestra flow create flows/kube-green-scheduler.yaml
