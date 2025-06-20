@@ -1,4 +1,4 @@
-# This is the kestra fflow file
+# This is the kestra flow file
 name: Deploy Kestra Flow
 
 on:
