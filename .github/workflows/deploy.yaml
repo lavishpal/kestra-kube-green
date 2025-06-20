@@ -15,7 +15,10 @@ jobs:
 
       - name : Download Kestra CLI
         run: |
-           curl -L https://github.com/kestra-io/kestra/releases/latest/download/kestra-linux-amd64 -o kestra
+           curl -L https://github.com/kestra-io/kestra/releases/latest/download/kestra-linux-amd64 -o kestra  
+     
+      - name : Permissions
+        run: |
            chmod +x kestra 
            mkdir -p ~/.kestra/bin
            mv kestra ~/.kestra/bin/
