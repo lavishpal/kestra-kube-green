@@ -17,14 +17,17 @@ jobs:
         run: |
            curl -L https://github.com/kestra-io/kestra/releases/latest/download/kestra-linux-amd64 -o kestra  
      
-      - name : Permissions
+      - name : Make kestra execuatable
         run: |
-           chmod +x kestra 
+           chmod +x kestra
+      - name : Create kestra bin director
         run: |
            mkdir -p ~/.kestra/bin
+      - name : Move kestra binary
         run: |
-           mv kestra ~/.kestra/bin/
-        run: |   
+           mv kestra ~/.kestra/bin/  
+      - name : Add kestra to PATH
+        run: |
            echo "$HOME/.kestra/bin" >> $GITHUB_PATH   
 
       - name: Verify Kestra CLI Install
