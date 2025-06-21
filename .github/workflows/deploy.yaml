@@ -15,7 +15,7 @@ jobs:
 
       - name : Download Kestra CLI
         run: |
-           curl -L https://github.com/kestra-io/kestra/releases/download/v0.23.1/kestra-linux-amd64
+           curl -L https://github.com/kestra-io/kestra/releases/download/v0.23.1/kestra-linux-amd64 -o kestra
   
      
       - name : Make kestra execuatable
